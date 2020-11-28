@@ -3,13 +3,11 @@ import requests
 from PIL import Image as PilImage
 
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView, FormView
 
 from django.urls import reverse
 
 from django.core.files.base import ContentFile
-
-from django.views.generic import ListView, FormView
-
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Image, ResizedImage
@@ -87,10 +85,11 @@ class UploadImageView(FormView, ImageMixin):
     template_name = "resizer/upload.html"
     form_class = UploadForm
 
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
         if form.cleaned_data["url"] and form.cleaned_data["image"]:
-            error: str = "Нужно ввести только одно поле"
-            return render(self.request, self.template_name, {"error": error})
+            context = super().get_context_data(**kwargs)
+            context["error"]: str = "Нужно ввести только одно поле"
+            return render(self.request, self.template_name, context)
 
         if form.cleaned_data["url"]:
             image: Image = self.save_image_from_url(form.cleaned_data["url"])
