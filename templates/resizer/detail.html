@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Image detail -> {{ object.pk }}</title>
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'resizer:list' %}">Назад к списку</a>
+    <h2>{{ image.image }}</h2>
+
+    {% if image.resizedimage %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="width">Ширина</label> <br>
+        <input type="text" id="width" name="width" placeholder="{{ image.resizedimage.resized_image.width }}"> <br>
+        <label for="height">Высота</label> <br>
+        <input type="text" id="height" name="height" placeholder="{{ image.resizedimage.resized_image.height }}"> <br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <img src="{{ image.resizedimage.resized_image.url }}" alt="">
+    {% else %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="width">Ширина</label> <br>
+        <input type="text" id="width" name="width" placeholder="{{ image.image.width }}"> <br>
+        <label for="height">Высота</label> <br>
+        <input type="text" id="height" name="height" placeholder="{{ image.image.height }}"> <br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <img src="{{ image.image.url }}" alt="">
+    {% endif %}
+
+{% endblock %}
