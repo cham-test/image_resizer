@@ -17,6 +17,7 @@ class Image(models.Model):
     def get_absolute_url(self):
         return reverse("resizer:detail", args=[self.pk])
 
+
 class ResizedImage(models.Model):
     original_image = models.OneToOneField(Image, models.CASCADE)
     resized_image = models.ImageField(upload_to="resized_image", verbose_name="Измененное изображение", null=True, blank=True)
